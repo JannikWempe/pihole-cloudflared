@@ -8,15 +8,15 @@ services:
     restart: unless-stopped
     command: proxy-dns
     environment:
-      - TUNNEL_DNS_UPSTREAM=https://1.1.1.1/dns-query,https://1.0.0.1/dns-query,https://9.9.9.9/dns-query,https://149.112.112.9/dns-query
+      - TUNNEL_DNS_UPSTREAM=https://1.1.1.1/dns-query,https://1.0.0.1/dns-query
       # Listen on an unprivileged port
       - TUNNEL_DNS_PORT=5053
       # Listen on all interfaces
       - TUNNEL_DNS_ADDRESS=0.0.0.0
     # Attach cloudflared only to the private network
     networks:
-      internal:
-        ipv4_address: 172.30.9.2
+      pihole_net:
+        ipv4_address: 10.0.0.2
   pihole:
     container_name: pihole
     image: pihole/pihole:latest
@@ -27,12 +27,18 @@ services:
       - "67:67/udp"
       - "80:80/tcp"
       - "443:443/tcp"
+    dns:
+      - 127.0.0.1
+      - 1.1.1.1
+      - 1.0.0.1
     environment:
       - TZ=${TZ}
       - WEBPASSWORD=${WEBPASSWORD}
       - ADMIN_EMAIL=${ADMIN_EMAIL}
+      - IPv6=false
+      - ServerIP=10.0.0.3
       # Internal IP of the cloudflared container
-      - DNS1=172.30.9.2#5053
+      - DNS1=10.0.0.2#5053
       # Explicitly disable a second DNS server, otherwise Pi-hole uses Google
       - DNS2=no
       # Listen on all interfaces and permit all origins
@@ -47,17 +53,15 @@ services:
     # 1. Join the internal network so Pi-hole can talk to cloudflared
     # 2. Join the public network so it's reachable by systems on our LAN
     networks:
-      internal:
-        ipv4_address: 172.30.9.3
-      priv_lan:
+      pihole_net:
+        ipv4_address: 10.0.0.3
     depends_on:
       - cloudflared
 
 networks:
-  # Create the internal network
-  internal:
+  # Create the pihole_net network
+  pihole_net:
+    driver: bridge
     ipam:
       config:
-        - subnet: 172.30.9.0/29
-  # The priv_lan network is already setup, so it is an 'external' network
-  priv_lan:
+        - subnet: 10.0.0.0/29
