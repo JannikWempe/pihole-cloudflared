@@ -5,7 +5,7 @@ This little project provides a way to set up (and possibly tear down) PiHole in 
 PiHole blocks requests to blacklisted domains (mostly advertising serving) and it uses exclusively cloudflared to enforce DoH. DNS Security Extensions (DNSSEC) is enabled.
 
 ## RPi prerequisites
-Your RPi should have a static IP and port 80 should be open to anble access to PiHoles admin interface.
+Your RPi should have a static IP and port 80 should be open in order to be able to access PiHoles admin interface.
 
 ## Running the project
 
@@ -14,8 +14,13 @@ cp .env.example .env
 # add  settings to .env
 docker-compose up -d
 ```
+## Update PiHole
 
-## Set up PiHole
+```bash
+# update pihole version in docker-compose.yml
+# restart rebuilt pihole container
+docker-compose up -d --build pihole
+```
 
 ## Settings in router
 I have a FritzBox and therefore the following instructions are only applicable for that router.
