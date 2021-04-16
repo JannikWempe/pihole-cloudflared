@@ -2,7 +2,7 @@ version: "3.6"
 
 services:
   pihole:
-    image: pihole/pihole:latest
+    image: pihole/pihole:v5.8
     container_name: pihole
     hostname: pihole
     networks:
@@ -38,7 +38,7 @@ services:
       - cloudflared
 
   cloudflared:
-    image: crazymax/cloudflared:latest
+    image: crazymax/cloudflared:2021.3.6
     container_name: cloudflared
     hostname: cloudflared
     networks:
