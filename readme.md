@@ -15,16 +15,16 @@ Your RPi should have a static IP and port 80 should be open in order to be able 
 ```bash
 cp .env.example .env
 # add  settings to .env
-docker-compose up -d
+docker compose up -d
 ```
 
 ## Update PiHole
 
 ```bash
 # pull newest images
-docker-compose pull
+docker compose pull
 # restart with newest images
-docker-compose up --force-recreate --build -d
+docker compose up --force-recreate --build -d
 # remove unused images
 docker image prune -f
 ```

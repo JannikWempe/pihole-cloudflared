@@ -1,4 +1,4 @@
-version: "3.5"
+name: pihole
 
 services:
   pihole:
@@ -27,15 +27,15 @@ services:
         published: 443
         protocol: tcp
     environment:
-      - "TZ=${TZ}"
-      - "WEBPASSWORD=${WEBPASSWORD}"
-      - "VIRTUAL_HOST=pihole.fritz.box" # make pihole available under pihole.fritz.box
-      - "PROXY_LOCATION=pihole"
-      - "VIRTUAL_PORT=80"
-      - "PIHOLE_DNS_=172.20.0.3#5053"
+      - 'TZ=${TZ}'
+      - 'WEBPASSWORD=${WEBPASSWORD}'
+      - 'VIRTUAL_HOST=pihole.fritz.box' # make pihole available under pihole.fritz.box
+      - 'PROXY_LOCATION=pihole'
+      - 'VIRTUAL_PORT=80'
+      - 'PIHOLE_DNS_=172.20.0.3#5053'
     volumes:
-      - "./etc-pihole/:/etc/pihole/"
-      - "./etc-dnsmasq.d/:/etc/dnsmasq.d/"
+      - './etc-pihole/:/etc/pihole/'
+      - './etc-dnsmasq.d/:/etc/dnsmasq.d/'
     restart: always
 
   cloudflared:
@@ -46,8 +46,8 @@ services:
       pihole:
         ipv4_address: 172.20.0.3
     environment:
-      - "TZ=${TZ}"
-      - "TUNNEL_DNS_UPSTREAM=https://1.1.1.1/dns-query,https://1.0.0.1/dns-query"
+      - 'TZ=${TZ}'
+      - 'TUNNEL_DNS_UPSTREAM=https://1.1.1.1/dns-query,https://1.0.0.1/dns-query'
     restart: always
 
 networks:
