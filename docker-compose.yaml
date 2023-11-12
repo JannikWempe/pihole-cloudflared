@@ -36,6 +36,8 @@ services:
     volumes:
       - './etc-pihole/:/etc/pihole/'
       - './etc-dnsmasq.d/:/etc/dnsmasq.d/'
+    depends_on:
+      - cloudflared
     restart: always
 
   cloudflared:
